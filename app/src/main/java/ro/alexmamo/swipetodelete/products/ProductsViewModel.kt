@@ -4,9 +4,9 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 
 class ProductsViewModel @ViewModelInject constructor(
-    private val productsRepository: ProductsRepository
+    private val repository: ProductsRepository
 ): ViewModel() {
-    fun getProducts() = productsRepository.getProductsFromFirestore()
+    fun getProductList() = repository.getProductListFromFirestore()
 
-    fun deleteProduct(productId: String) = productsRepository.deleteProductInFirestore(productId)
+    fun deleteProduct(id: String) = repository.deleteProductInFirestore(id)
 }

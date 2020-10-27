@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductsRepository @Inject constructor(private val productsRef: CollectionReference) {
-    fun getProductsFromFirestore(): MutableLiveData<DataOrException<MutableList<Product>, Exception>> {
+    fun getProductListFromFirestore(): MutableLiveData<DataOrException<MutableList<Product>, Exception>> {
         val mutableLiveData = MutableLiveData<DataOrException<MutableList<Product>, Exception>>()
         productsRef.orderBy(NAME_PROPERTY, ASCENDING).get().addOnCompleteListener { productsTask ->
             val dataOrException = DataOrException<MutableList<Product>, Exception>()
@@ -30,9 +30,9 @@ class ProductsRepository @Inject constructor(private val productsRef: Collection
         return mutableLiveData
     }
 
-    fun deleteProductInFirestore(productId: String): MutableLiveData<DataOrException<Boolean, Exception>> {
+    fun deleteProductInFirestore(id: String): MutableLiveData<DataOrException<Boolean, Exception>> {
         val mutableLiveData = MutableLiveData<DataOrException<Boolean, Exception>>()
-        productsRef.document(productId).delete().addOnCompleteListener { deleteTask ->
+        productsRef.document(id).delete().addOnCompleteListener { deleteTask ->
             val dataOrException = DataOrException<Boolean, Exception>()
             if (deleteTask.isSuccessful) {
                 dataOrException.data = true

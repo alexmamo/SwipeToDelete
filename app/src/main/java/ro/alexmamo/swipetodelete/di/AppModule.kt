@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import ro.alexmamo.swipetodelete.utils.Constants.PRODUCTS_COLLECTION
 import javax.inject.Singleton
 
 @Module
@@ -16,5 +17,5 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideProductsCollectionReference(rootRef: FirebaseFirestore) = rootRef.collection("products")
+    fun provideProductsCollectionReference(rootRef: FirebaseFirestore) = rootRef.collection(PRODUCTS_COLLECTION)
 }

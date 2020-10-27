@@ -18,33 +18,33 @@ import ro.alexmamo.swipetodelete.utils.General.Companion.toastMessage
 @AndroidEntryPoint
 class ProductsActivity : AppCompatActivity() {
     private lateinit var dataBinding: ActivityProductsBinding
-    private val products: MutableList<Product> = mutableListOf()
-    private val productsAdapter = ProductsAdapter(products)
-    private val productViewModel: ProductsViewModel by viewModels()
+    private val productList: MutableList<Product> = mutableListOf()
+    private val adapter = ProductsAdapter(productList)
+    private val viewModel: ProductsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_products)
         dataBinding = setContentView(this, R.layout.activity_products)
-        setOnRecyclerViewItemSwipedListener()
         setProductsAdapter()
         getProducts()
+        setOnRecyclerViewItemSwipedListener()
     }
 
     private fun setProductsAdapter() {
-        dataBinding.productsRecyclerView.adapter = productsAdapter
+        dataBinding.productsRecyclerView.adapter = adapter
     }
 
     private fun getProducts() {
-        val productsLiveData = productViewModel.getProducts()
+        val productsLiveData = viewModel.getProductList()
         productsLiveData.observe(this, { dataOrException ->
             val productList = dataOrException.data
             if (productList != null) {
-                if (products.isNotEmpty()) {
+                if (this.productList.isNotEmpty()) {
                     productList.clear()
                 }
-                products.addAll(productList)
-                productsAdapter.notifyDataSetChanged()
+                this.productList.addAll(productList)
+                adapter.notifyDataSetChanged()
                 hideProgressBar()
             }
 
@@ -70,7 +70,7 @@ class ProductsActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val swipedProduct = products[position]
+                val swipedProduct = productList[position]
                 deleteSwipedProduct(position, swipedProduct)
 
             }
@@ -79,14 +79,14 @@ class ProductsActivity : AppCompatActivity() {
     }
 
     private fun deleteSwipedProduct(position: Int, swipedProduct: Product) {
-        val isProductDeletedLiveData = productViewModel.deleteProduct(swipedProduct.id!!)
+        val isProductDeletedLiveData = viewModel.deleteProduct(swipedProduct.id!!)
         isProductDeletedLiveData.observe(this, { dataOrException ->
             val isProductDeleted = dataOrException.data
             if (isProductDeleted != null) {
                 if (isProductDeleted) {
-                    products.removeAt(position)
-                    productsAdapter.notifyItemRemoved(position)
-                    productsAdapter.notifyItemRangeChanged(position, products.size)
+                    productList.removeAt(position)
+                    adapter.notifyItemRemoved(position)
+                    adapter.notifyItemRangeChanged(position, productList.size)
                     val message = swipedProduct.name + " is deleted!"
                     toastMessage(this, message)
                 }
