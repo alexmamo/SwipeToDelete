@@ -1,8 +1,9 @@
 package ro.alexmamo.swipetodelete.products
 
-import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.Query.Direction.ASCENDING
+import kotlinx.coroutines.tasks.await
 import ro.alexmamo.swipetodelete.data.DataOrException
 import ro.alexmamo.swipetodelete.data.Product
 import ro.alexmamo.swipetodelete.utils.Constants.NAME_PROPERTY
@@ -11,36 +12,30 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductsRepository @Inject constructor(private val productsRef: CollectionReference) {
-    fun getProductListFromFirestore(): MutableLiveData<DataOrException<MutableList<Product>, Exception>> {
-        val mutableLiveData = MutableLiveData<DataOrException<MutableList<Product>, Exception>>()
-        productsRef.orderBy(NAME_PROPERTY, ASCENDING).get().addOnCompleteListener { productsTask ->
-            val dataOrException = DataOrException<MutableList<Product>, Exception>()
-            if (productsTask.isSuccessful) {
-                val products = mutableListOf<Product>()
-                for (document in productsTask.result!!) {
-                    val product = document.toObject(Product::class.java)
-                    products.add(product)
-                }
-                dataOrException.data = products
-            } else {
-                dataOrException.exception = productsTask.exception
+    suspend fun getProductListFromFirestore(): DataOrException<MutableList<Product>, Exception> {
+        val dataOrException = DataOrException<MutableList<Product>, Exception>()
+        try {
+            val productList = mutableListOf<Product>()
+            val products = productsRef.orderBy(NAME_PROPERTY, ASCENDING).get().await()
+            for (document in products) {
+                val product = document.toObject(Product::class.java)
+                productList.add(product)
             }
-            mutableLiveData.setValue(dataOrException)
+            dataOrException.data = productList
+        } catch (e: FirebaseFirestoreException) {
+            dataOrException.e = e
         }
-        return mutableLiveData
+        return dataOrException
     }
 
-    fun deleteProductInFirestore(id: String): MutableLiveData<DataOrException<Boolean, Exception>> {
-        val mutableLiveData = MutableLiveData<DataOrException<Boolean, Exception>>()
-        productsRef.document(id).delete().addOnCompleteListener { deleteTask ->
-            val dataOrException = DataOrException<Boolean, Exception>()
-            if (deleteTask.isSuccessful) {
-                dataOrException.data = true
-            } else {
-                dataOrException.exception = deleteTask.exception
-            }
-            mutableLiveData.setValue(dataOrException)
+    suspend fun deleteProductInFirestore(id: String): DataOrException<Boolean, Exception> {
+        val dataOrException = DataOrException<Boolean, Exception>()
+        try {
+            productsRef.document(id).delete().await()
+            dataOrException.data = true
+        } catch (e: FirebaseFirestoreException) {
+            dataOrException.e = e
         }
-        return mutableLiveData
+        return dataOrException
     }
 }
