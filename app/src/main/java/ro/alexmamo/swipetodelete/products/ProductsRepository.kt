@@ -18,8 +18,9 @@ class ProductsRepository @Inject constructor(private val productsRef: Collection
             val productList = mutableListOf<Product>()
             val products = productsRef.orderBy(NAME_PROPERTY, ASCENDING).get().await()
             for (document in products) {
-                val product = document.toObject(Product::class.java)
-                productList.add(product)
+                document.toObject(Product::class.java).let {
+                    productList.add(it)
+                }
             }
             dataOrException.data = productList
         } catch (e: FirebaseFirestoreException) {
