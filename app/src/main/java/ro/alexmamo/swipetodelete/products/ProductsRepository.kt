@@ -11,7 +11,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProductsRepository @Inject constructor(private val productsRef: CollectionReference) {
+class ProductsRepository @Inject constructor(
+    private val productsRef: CollectionReference
+) {
     suspend fun getProductListFromFirestore(): DataOrException<MutableList<Product>, Exception> {
         val dataOrException = DataOrException<MutableList<Product>, Exception>()
         try {
