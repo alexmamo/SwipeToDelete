@@ -70,7 +70,6 @@ class ProductsActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 val swipedProduct = products[position]
                 deleteProduct(position, swipedProduct)
-
             }
 
         }).attachToRecyclerView(dataBinding.productsRecyclerView)
