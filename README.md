@@ -10,4 +10,6 @@ For getting the data, the app uses [LiveData](https://developer.android.com/topi
 
 To make this app work, follow the instructions given in the official documentation regarding [how to add Firebase to your project](https://firebase.google.com/docs/android/setup). Add the JSON file in your app folder, add some dummy products and see it working.
 
+This repo is the source code of the this article: [How to delete a record from Firestore on a RecylerView left/right swipe?](https://medium.com/firebase-tips-tricks/how-to-delete-a-record-from-firestore-on-a-recylerview-left-right-swipe-d65d993f0baf)
+
 See it on youtube: Coming soon
