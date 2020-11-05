@@ -9,12 +9,10 @@ class ProductsViewModel @ViewModelInject constructor(
     private val repository: ProductsRepository
 ): ViewModel() {
     val productListLiveData = liveData(Dispatchers.IO) {
-        val productList = repository.getProductListFromFirestore()
-        emit(productList)
+        emit(repository.getProductListFromFirestore())
     }
 
     fun deleteProduct(id: String) = liveData(Dispatchers.IO) {
-        val isProductDeleted = repository.deleteProductInFirestore(id)
-        emit(isProductDeleted)
+        emit(repository.deleteProductInFirestore(id))
     }
 }
