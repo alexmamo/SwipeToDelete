@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data class="UserDataBinding">
+    <data class="ProductDataBinding">
         <variable
             name="product"
             type="ro.alexmamo.swipetodelete.data.Product" />
