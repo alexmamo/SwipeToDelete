@@ -2,6 +2,7 @@ package ro.alexmamo.swipetodelete.products
 
 import android.os.Bundle
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil.setContentView
@@ -52,10 +53,6 @@ class ProductsActivity : AppCompatActivity() {
         })
     }
 
-    private fun hideProgressBar() {
-        dataBinding.progressBar.visibility = GONE
-    }
-
     private fun setOnRecyclerViewItemSwipedListener() {
         ItemTouchHelper(object : SimpleCallback(0, LEFT or RIGHT) {
             override fun onMove(
@@ -76,6 +73,7 @@ class ProductsActivity : AppCompatActivity() {
     }
 
     private fun deleteProduct(position: Int, product: Product) {
+        displayProgressBar()
         val isProductDeletedLiveData = viewModel.deleteProduct(product.id!!)
         isProductDeletedLiveData.observe(this, { dataOrException ->
             val isProductDeleted = dataOrException.data
@@ -84,6 +82,7 @@ class ProductsActivity : AppCompatActivity() {
                     products.removeAt(position)
                     adapter.notifyItemRemoved(position)
                     adapter.notifyItemRangeChanged(position, products.size)
+                    hideProgressBar()
                 }
             }
 
@@ -91,5 +90,13 @@ class ProductsActivity : AppCompatActivity() {
                 logErrorMessage(dataOrException.e!!.message!!)
             }
         })
+    }
+
+    private fun displayProgressBar() {
+        dataBinding.progressBar.visibility = VISIBLE
+    }
+
+    private fun hideProgressBar() {
+        dataBinding.progressBar.visibility = GONE
     }
 }
