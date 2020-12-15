@@ -12,4 +12,4 @@ To make this app work, follow the instructions given in the official documentati
 
 This repo is the source code of the this article: [How to delete a record from Firestore on a RecylerView left/right swipe?](https://medium.com/firebase-tips-tricks/how-to-delete-a-record-from-firestore-on-a-recylerview-left-right-swipe-d65d993f0baf)
 
-See it on youtube: Coming soon
+See it on youtube: https://www.youtube.com/watch?v=ZmQR88Bn0fA
