@@ -74,7 +74,7 @@ class ProductsActivity : AppCompatActivity() {
     private fun deleteProduct(position: Int, product: Product) {
         displayProgressBar()
         val isProductDeletedLiveData = viewModel.deleteProduct(product.id!!)
-        isProductDeletedLiveData.observe(this, { dataOrException ->
+        isProductDeletedLiveData.observe(this) { dataOrException ->
             val isProductDeleted = dataOrException.data
             if (isProductDeleted != null) {
                 if (isProductDeleted) {
@@ -88,7 +88,7 @@ class ProductsActivity : AppCompatActivity() {
             if (dataOrException.e != null) {
                 logErrorMessage(dataOrException.e!!.message!!)
             }
-        })
+        }
     }
 
     private fun displayProgressBar() {
