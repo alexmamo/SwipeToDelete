@@ -2,11 +2,12 @@ package ro.alexmamo.swipetodelete.products
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import ro.alexmamo.swipetodelete.BR
+import ro.alexmamo.swipetodelete.R
 import ro.alexmamo.swipetodelete.data.Product
-import ro.alexmamo.swipetodelete.databinding.ProductDataBinding
 import ro.alexmamo.swipetodelete.products.ProductsAdapter.ProductViewHolder
 
 class ProductsAdapter(
@@ -14,8 +15,10 @@ class ProductsAdapter(
 ): RecyclerView.Adapter<ProductViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
-        val dataBinding = ProductDataBinding.inflate(
+        val itemProduct = R.layout.item_product
+        val dataBinding = DataBindingUtil.inflate<ViewDataBinding>(
             layoutInflater,
+            itemProduct,
             parent,
             false
         )
